@@ -4,3 +4,7 @@
     width: 100vw;
     /* background-color: red; */
 }
+
+::-webkit-scrollbar{
+    display: none;
+}
