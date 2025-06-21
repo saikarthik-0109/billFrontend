@@ -6,12 +6,21 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { MdPassword } from "react-icons/md";
 import { validatePassword } from 'val-pass';
 import toast from 'react-hot-toast';
+import empServices from '../service/empServices';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
 
-  const [formData,setformData]=useState({})
+  const [formData,setformData]=useState({
+    name:"",
+    userName:"",
+    email:"",
+    password:""
+  })
   const [RepeatPassword,setRepeatPassword] =useState(true)
   const [errorMessage,setErrorMessage]=useState("")
+  const navigate=useNavigate("")
+
   let handleChange=(e)=>{
     let {name,value} =e.target
     if(name =="password"){
@@ -49,13 +58,29 @@ if(!validateAll())
 
 if(!RepeatPassword)
 {
-  toast.error("password and repaeatPassword are not matched")
+  toast.error("password and repeatPassword are not matched")
   return 
 }
 
+(async()=>{
+try {
+  let data=await empServices.regiUser(formData)
+  console.log(data);
 
-console.log(formData);
-
+  
+  if(data.status == 201){
+    toast.success("Registered SuccessFully")
+    navigate("/login")
+   
+  }
+  else{
+    toast.error("something went wrong")
+    
+  }
+} catch (error) {
+  toast.error("something went wrong")
+}
+})()
   }
  
 
@@ -99,7 +124,7 @@ console.log(formData);
       
 
 
-     <div className=' w-full flex justify-center items-center  border-2 rounded-sm   border-none hover:bg-white active:bg-white active:scale-[o.5] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'>
+     <div className=' w-full flex justify-center items-center  border-2 rounded-sm   border-none hover:bg-black active:bg-black active:scale-[o.5] bg-black'>
       <button className='h-12 w-full text-white font-bold text-md  tracking-widest '>Click</button>
      </div>
       </form>
