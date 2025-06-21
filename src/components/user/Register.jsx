@@ -40,6 +40,8 @@ const Register = () => {
    value="" && setRepeatPassword(true)
    
   }
+
+  
   const handleSubmit=(e)=>{
 e.preventDefault()
 let {name,userName,password,email}=formData
