@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 import { MdOutlineMailOutline } from 'react-icons/md'
 import { RiLockPasswordLine } from 'react-icons/ri'
+import empServices from '../service/empServices'
+import { Link, useNavigate } from 'react-router-dom'
 
 
 const Login = () => {
+  const navigate=useNavigate()
 
 
 const [state,setState]=useState({
@@ -20,6 +24,29 @@ let handleSubmit=(e)=>{
 e.preventDefault()
 
 console.log(state);
+
+(async()=>{
+try {
+  let data=await empServices.loginUser(state)
+  console.log(data);
+
+  
+  if(data.status == 200){
+    toast.success("login SuccessFully")
+    navigate("/home")
+   
+  }
+  else{
+    toast.error(`${data.response.data.message}`)
+    
+  }
+} catch (error) {
+  toast.error("something went wrong")
+  console.log(error);
+  
+}
+
+})()
 
 }
 
@@ -42,7 +69,9 @@ console.log(state);
      <div className=' w-full flex justify-center items-center  border-2 rounded-sm   border-none hover:bg-gray-700 active:bg-gray-950 active:scale-90 bg-black'>
       <button className='h-12 w-full text-white font-bold text-md  tracking-widest '>Click</button>
      </div>
+     <div className='hover:underline'><Link to="/register">Click Here To Register</Link></div>
         </form>
+        
     </div>
   )
 }

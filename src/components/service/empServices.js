@@ -8,7 +8,18 @@ let empServices={
         return data
        } catch (error) {
         return error
+
        }
+        
+    },
+       loginUser:async(Payload)=>{
+       try {
+         let data=await axiosInstance.post("/login",Payload)
+        return data
+       } catch (error) {
+        return error
+       }
+
         
     }
 }

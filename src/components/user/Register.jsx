@@ -72,7 +72,7 @@ try {
   
   if(data.status == 201){
     toast.success("Registered SuccessFully")
-    navigate("/login")
+    navigate("/")
    
   }
   else{
