@@ -8,7 +8,7 @@ const NavBar = () => {
     const handleShow=()=>{
         setShow(!show)
     }
-    console.log(show);
+    // console.log(show);
     
   return (
     <div className= {`w-full h-[80px] flex justify-around items-center bg-black text-amber-50 text-2xl max-sm:justify-start fixed  

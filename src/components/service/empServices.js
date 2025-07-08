@@ -23,10 +23,12 @@ let empServices={
         
     },
     addbill:async (Payload,token) => {
+      // console.log(token);
+      
       try {
          let data =await axiosInstance.post("/add-bill",Payload,{
      headers:{
-      "Authorization":`Bearer${token}`
+      "Authorization":`Bearer ${token}`
      }
          })
          // console.log(data);
@@ -40,7 +42,7 @@ let empServices={
      try {
       let data=await axiosInstance.get("/get-bill-by-user",{
          headers:{
-            "Authorization":`Bearer${token}`
+            "Authorization":`Bearer ${token}`
          }
       })
       // console.log(data);

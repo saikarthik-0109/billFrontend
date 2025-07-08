@@ -19,7 +19,11 @@ const Home = () => {
   console.log(allBills);
   
   return (
-    <div>Home</div>
+    <>
+    <div className='size-full flex flex-wrap h-[100px] w-[100px]'>
+     
+    </div>
+    </>
   )
 }
 

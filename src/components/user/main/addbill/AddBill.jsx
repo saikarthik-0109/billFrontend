@@ -1,24 +1,30 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import Items from './Items'
 import axios from 'axios'
 import empServices from '../../../service/empServices'
 import toast from 'react-hot-toast'
+import { contextApi } from '../../../context/Context'
 
 const AddBill = () => {
+  const [items,setItems]=useState([])
+  const {globalState}=useContext(contextApi)
+  console.log(globalState);
+  
+  const navigate = useNavigate()
   const [bill,setBill]=useState({
     companyName:"",
     items:"",
     totalAmount:"",
     PoNo:"",
-    invoiceDate:new Date().toISOString().split("T")[0],
+    invoiceDate: new Date().toISOString().split("T")[0],
     workCompletionDate:"",
     address:"",
     PAN:"",
     GSTNo:"",
     clientBankName:""
   })
-  const [items,setItems]=useState([])
+  
 
   const handleSubmit=(e)=>{
     e.preventDefault()
@@ -35,6 +41,7 @@ const AddBill = () => {
       return acc+base+cgst+sgst
     },0)
 
+    // console.log(bill);
     
     let payload={
       companyName,
@@ -45,6 +52,7 @@ const AddBill = () => {
       GSTNo,
       clientBankName,
       items,
+      invoiceDate: new Date().toISOString().split("T")[0],
       totalAmount
     }
     console.log(payload);
@@ -54,9 +62,12 @@ const AddBill = () => {
      (async()=>{
     try {
       let data=await empServices.addbill(payload,globalState.token)
+      console.log(data);
+      
       if(data.status == 201)
       {
         toast.success("Bills added succesfully")
+        navigate("/home")
       }
       else{
         toast.error("something went wrong")
@@ -68,7 +79,7 @@ const AddBill = () => {
     
   }
   const handleClick=()=>{
-    console.log("i am clicked");
+    // console.log("i am clicked");
     let newObj ={
       id:Date.now(),
       description:"",
@@ -82,7 +93,7 @@ const AddBill = () => {
   }
   const handleChange=(e)=>{
      const {name,value} = e.target
-     setBill(({preVal})=>({...preVal,[name]:value}))
+     setBill((preVal)=>({...preVal,[name]:value}))
   }
 
   const removeElement =(id)=>{
@@ -147,15 +158,15 @@ const AddBill = () => {
 
         
        <div className=' w-full flex justify-center items-center  border-1 rounded-sm px-4 py-1.5'>
-          <input type="text" name=' PAN' placeholder='Enter PANCARD Number' className='w-full outline-0' onChange={handleChange}/>
+          <input type="text" name='PAN' placeholder='Enter PANCARD Number' className='w-full outline-0' onChange={handleChange}/>
          </div>
 
 
       <div className=' w-full flex justify-center items-center  border-1 rounded-sm px-4 py-1.5'>
-          <input type="text" name=' GSTNo' placeholder='Enter GST Number' className='w-full outline-0' onChange={handleChange}/>
+          <input type="text" name='GSTNo' placeholder='Enter GST Number' className='w-full outline-0' onChange={handleChange}/>
          </div>
 
- <div className=' w-full flex justify-center items-center  border-1 rounded-sm px-4 py-1.5'>
+        <div className=' w-full flex justify-center items-center  border-1 rounded-sm px-4 py-1.5'>
           <input type="text" name='clientBankName' placeholder='Enter clientBankName' className='w-full outline-0' onChange={handleChange}/>
         
          </div>
