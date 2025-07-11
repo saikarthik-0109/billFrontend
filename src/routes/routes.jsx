@@ -7,6 +7,7 @@ import About from "../components/user/main/about/About";
 import AddBill from "../components/user/main/addbill/AddBill";
 import FilterBills from "../components/user/main/filterbills/FilterBills";
 import Items from "../components/user/main/addbill/Items";
+import UpdateBills from "../components/user/main/updatebills/UpdateBills";
 
 let routes=createBrowserRouter(
     [
@@ -33,17 +34,16 @@ children:[
         {
                path:"addbill",
               element:<AddBill></AddBill>,
-       children:[
-        {
-path:"items",
-element:<Items></Items>
-        }
-       ]
+       
        
         },
         {
                path:"filterbills",
                element:<FilterBills></FilterBills>
+        },
+        {
+                path:"updatebills",
+                element:<UpdateBills></UpdateBills>
         }
        
        

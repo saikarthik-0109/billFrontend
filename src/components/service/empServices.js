@@ -51,6 +51,44 @@ let empServices={
      } catch (error) {
       return error
      }
+    },
+    updateBills:async (payload,token,id)=>{
+        console.log(payload);
+        
+        try {
+            let data=await axiosInstance.put(`/update-bill/${id}`,payload,{
+                headers:{
+                    "Authorization":`Bearer ${token}`
+                }
+            })
+
+            // console.log(data);
+            return data
+            
+        } catch (error) {
+            // console.log(error);
+            return error
+        }
+    },
+    deleteBills:async (token,id)=>{
+        console.log(token);
+        
+        try {
+            let data=await axiosInstance.delete(`/delete-bill/${id}`,{
+                headers:{
+                    "Authorization":`Bearer ${token}`
+                }
+            })
+
+            // console.log(data);
+            return data
+            
+        } catch (error) {
+            // console.log(error);
+            return error
+        }
     }
 }
 export default empServices
+//abcdefghijklmnopqrstuvwxyz
+//

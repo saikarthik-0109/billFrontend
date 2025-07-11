@@ -1,35 +1,46 @@
 import React, { useContext, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import Items from './Items'
-import axios from 'axios'
-import empServices from '../../../service/empServices'
-import toast from 'react-hot-toast'
-import { contextApi } from '../../../context/Context'
+import { useLocation, useNavigate } from 'react-router-dom';
+import empServices from '../../../service/empServices';
+import { contextApi } from '../../../context/Context';
+import Items from '../addbill/Items';
+import toast from 'react-hot-toast';
 
-const AddBill = () => {
-  const [items,setItems]=useState([])
-  const {globalState}=useContext(contextApi)
-  console.log(globalState);
-  
-  const navigate = useNavigate()
+const UpdateBills = () => {
+const navigate=useNavigate()
+    let {state}=useLocation()
+    console.log(state);
+    
   const [bill,setBill]=useState({
-    companyName:"",
-    items:"",
-    totalAmount:"",
-    PoNo:"",
-    invoiceDate: new Date().toISOString().split("T")[0],
-    workCompletionDate:"",
-    address:"",
-    PAN:"",
-    GSTNo:"",
-    clientBankName:""
+    companyName:state.companyName,
+    PoNo:state.PoNo,
+    invoiceDate:new Date().toISOString().split("T")[0],
+    workCompletionDate:state.workCompletionDate.split("T")[0],
+    address:state.address,
+    PAN:state.PAN,
+    GSTNo:state.GSTNo,
+    clientBankName:state.clientBankName
   })
-  
-
+  const {globalState}=useContext(contextApi)
+  const [items,setItems]=useState(state.items)
+  const handleChange=(e)=>{
+    let {name,value}=e.target
+    setBill((preVal)=>({...preVal,[name]:value}))
+  }
+  const  handleClick=e=>{
+    let newObj={
+      id:Date.now(),
+      description:"",
+      quantity:"",
+      rate:"",
+      cgstPercent:"",
+      sgstPercent:""
+    }
+   setItems((preVal)=>([...preVal,newObj])) 
+  }
   const handleSubmit=(e)=>{
     e.preventDefault()
-    console.log(bill);
-    console.log(items);
+    // console.log(bill);
+    // console.log(items);
     let {companyName,workCompletionDate,PoNo,address,PAN,GSTNo,clientBankName}=bill
     let totalAmount=items.reduce((acc,val)=>{
       const base=parseInt(val.amount)
@@ -40,9 +51,6 @@ const AddBill = () => {
       
       return acc+base+cgst+sgst
     },0)
-
-    console.log(bill);
-    
     let payload={
       companyName,
       workCompletionDate,
@@ -52,52 +60,32 @@ const AddBill = () => {
       GSTNo,
       clientBankName,
       items,
-      invoiceDate: new Date().toISOString().split("T")[0],
+      invoiceDate:new Date().toISOString().split("T")[0],
       totalAmount
     }
     console.log(payload);
-    // console.log(new Date().toISOString().split("T")[0]);
-    
 
-     (async()=>{
-    try {
-      let data=await empServices.addbill(payload,globalState.token)
-      console.log(data);
-      
-      if(data.status == 201)
-      {
-        toast.success("Bills added succesfully")
+    (async()=>{
+try {
+        let data=await empServices.updateBills(payload,globalState.token,state._id)
+      if(data.status==200){
+        toast.success("Bill Updated successfully")
         navigate("/home")
+      }else{
+        toast.error("Something went wrong")
       }
-      else{
-        toast.error("something went wrong")
-      }
-    } catch (error) {
-      toast.error("spmething went wrong")
-    }
-  })()
+} catch (error) {
+  toast.error("Something went wrong")
+}
+    })();
     
-  }
-  const handleClick=()=>{
-    // console.log("i am clicked");
-    let newObj ={
-      id:Date.now(),
-      description:"",
-      quantity:"",
-      rate:"",
-      cgstPercent:"",
-      sgstPercent:""
-    }
-    setItems((preVal)=>([...preVal,newObj]))
-    
-  }
-  const handleChange=(e)=>{
-     const {name,value} = e.target
-     setBill((preVal)=>({...preVal,[name]:value}))
+
   }
 
-  const removeElement =(id)=>{
-    setItems(items.filter((val)=>val.id!=id))
+  // console.log(new Date().toISOString().split("T")[0]);
+  
+  const removeElement=(id)=>{
+setItems(items.filter((val)=>val.id!=id))
   }
 
   const updateElements=(id,name,value)=>{
@@ -120,54 +108,55 @@ const AddBill = () => {
 
     })
   }
+  let {PAN,companyName,GSTNo,workCompletionDate,clientBankName,address,PoNo} =bill
 
- 
+
 
   return (
-
-
+    <>
+    
     <div className='bg-[#efefef] size-full flex justify-center items-center   '> 
-          <form action="" className='w-1/3 h-[75%] rounded-3xl shadow-2xl flex  items-center flex-col
+          <form action="" className='w-1/2 h-[75%] rounded-3xl shadow-2xl flex  items-center flex-col
           gap-10 px-[60px] overflow-scroll max-sm:w-[90%] mt-20 ' onSubmit={handleSubmit}> 
 
          <div className=' w-full flex justify-center items-center  mt-9 '>
-          <h1 className='font-bold text-4xl '>Add Bill</h1>
+          <h1 className='font-bold text-4xl '>Update-Bills</h1>
          </div>
 
          <div className=' w-full flex justify-center items-center  border-1 rounded-sm px-4 py-1.5'>
-          <input type="text" name='companyName' placeholder='Enter Company Name' className='w-full outline-0' onChange={handleChange}/>
+          <input type="text" name='companyName' placeholder='Enter Company Name' className='w-full outline-0' onChange={handleChange} value={companyName}/>
          </div>
           
           <div className=' w-full flex justify-center items-center  border-1 rounded-sm px-4 py-1.5' >
-          <input type="text" name='items' placeholder='Enter Items' className='w-full outline-0' onChange={handleChange }/>
+          <input type="text" name='items' placeholder='Enter Items' className='w-full outline-0' onChange={handleChange } />
          </div>
 
          <div className=' w-full flex justify-center items-center  border-1 rounded-sm px-4 py-1.5'>
-          <input type="text" name='PoNo'  placeholder='Enter PONO' className='w-full outline-0'onChange={handleChange}/>
+          <input type="text" name='PoNo'  placeholder='Enter PONO' className='w-full outline-0'onChange={handleChange}  value={PoNo}/>
          </div>
 
 
          <div className=' w-full flex justify-center items-center  border-1 rounded-sm px-4 py-1.5'>
           <input type="date" name='workCompletionDate' placeholder='Enter Work Completion Date' className='w-full outline-0' onChange={handleChange}
-          max={new Date().toISOString().split("T")[0]}/>
+          max={new Date().toISOString().split("T")[0]}  value={workCompletionDate}/>
          </div>
          
           <div className=' w-full flex justify-center items-center  border-1 rounded-sm px-4 py-1.5'>
-          <input type="text" name='address' placeholder='Enter Address' className='w-full outline-0' onChange={handleChange}/>
+          <input type="text" name='address' placeholder='Enter Address' className='w-full outline-0' onChange={handleChange} value={address}/>
          </div>
 
         
        <div className=' w-full flex justify-center items-center  border-1 rounded-sm px-4 py-1.5'>
-          <input type="text" name='PAN' placeholder='Enter PANCARD Number' className='w-full outline-0' onChange={handleChange}/>
+          <input type="text" name='PAN' placeholder='Enter PANCARD Number' className='w-full outline-0' onChange={handleChange}  value={PAN}/>
          </div>
 
 
       <div className=' w-full flex justify-center items-center  border-1 rounded-sm px-4 py-1.5'>
-          <input type="text" name='GSTNo' placeholder='Enter GST Number' className='w-full outline-0' onChange={handleChange}/>
+          <input type="text" name='GSTNo' placeholder='Enter GST Number' className='w-full outline-0' onChange={handleChange}   value={GSTNo}/>
          </div>
 
         <div className=' w-full flex justify-center items-center  border-1 rounded-sm px-4 py-1.5'>
-          <input type="text" name='clientBankName' placeholder='Enter clientBankName' className='w-full outline-0' onChange={handleChange}/>
+          <input type="text" name='clientBankName' placeholder='Enter clientBankName' className='w-full outline-0' onChange={handleChange} value={clientBankName}/>
         
          </div>
 
@@ -190,7 +179,10 @@ const AddBill = () => {
          
           </form>
         </div>
+  
+    
+    </>
   )
 }
 
-export default AddBill
+export default UpdateBills
