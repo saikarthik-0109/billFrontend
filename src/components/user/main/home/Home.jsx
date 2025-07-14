@@ -23,7 +23,7 @@ const Home = () => {
    const handelUpateBills=(bill)=>{
     // console.log(bill);
     
-    navigate("updateBills",{state:bill})
+    navigate("updatebills",{state:bill})
 
 
   }
@@ -57,7 +57,7 @@ const Home = () => {
       allBills.map((bill,index)=>(
         <div key={index} className='h-60 w-80  bg-white rounded-2xl shadow-lg border  border-gray-200 hover:shadow-xl transition duration-300 p-6 max-md:w-full    '>
          <h2 className="text-2xl font-bold text-blue-600 capitalize mb-3 text ">{bill.companyName}</h2>
-          <div className="text-sm text-gray-700 space-y-1 ">
+          <div className="text-sm text-gray-700 space-y-1 " key={index}>
             <p><span className="font-semibold">GST No:</span> {bill.GSTNo}</p>
             <p><span className="font-semibold">PAN:</span> {bill.PAN}</p>
             <p><span className="font-semibold">PO No:</span> {bill.PoNo}</p>

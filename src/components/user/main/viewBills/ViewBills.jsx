@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import empServices from '../../../service/empServices'
 import { contextApi } from '../../../context/Context'
+import toast from 'react-hot-toast'
 
 const ViewBills = () => {
     
@@ -10,6 +11,7 @@ const ViewBills = () => {
   const navigate=useNavigate()
   const {state}=useLocation()
 // console.log(state);
+
 useEffect(()=>{
     setAllBills(state)
 },[])
@@ -18,7 +20,7 @@ useEffect(()=>{
   const handleUpateBills=(bill)=>{
     // console.log(bill);
     
-    navigate("updateBills",{state:bill})
+   navigate("updatebills",{state:bill})
   }
   const handleDeleteClick=(id)=>{
     console.log(id);
