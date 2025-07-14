@@ -87,7 +87,39 @@ let empServices={
             // console.log(error);
             return error
         }
-    }
+    },
+
+               companyNames:async(token)=>{
+                // console.log(token);
+            try {
+               let data =await axiosInstance.get("/get-company-names",{
+                headers:{
+            "Authorization":`Bearer ${token}`
+                }
+           })
+           return data
+        } 
+          catch (error) {
+           return error
+        }
+
+    },
+    filteredBills:async(token,query)=>{
+        console.log(token);
+        
+        try {
+            let data =await axiosInstance.get(`/filter-bills?${query}`,{
+                headers:{
+                    "Authorization":`Bearer ${token}`
+                }
+            })
+            console.log(data);
+            
+            return data
+        } catch (error) {
+            return error
+        }
+    },
 }
 export default empServices
 //abcdefghijklmnopqrstuvwxyz
